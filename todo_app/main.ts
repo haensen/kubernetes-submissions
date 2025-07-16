@@ -4,7 +4,7 @@ const app = new Hono();
 
 app.get("/", (c) => c.html("<h1>Hello World</h1>"));
 
-const PORT = Deno.env.get("PORT") || 3000;
+const PORT = Deno.env.get("PORT") || 8000;
 Deno.serve({
     port: PORT,
     onListen: ({ port }) => {

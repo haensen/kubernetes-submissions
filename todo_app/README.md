@@ -1,7 +1,5 @@
 # Todo app server
 
-The default port is 3000, but can be configured using the PORT env. variable.
-
 Deploy and test:
 ```
 kubectl apply -f manifests/deployment.yaml

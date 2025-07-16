@@ -18,7 +18,7 @@ const getImage = async () => {
     const imageExists = await exists(IMAGE_FILE);
     if (!imageExists || lastFetchTime + FETCH_TIME_INTERVAL < Date.now()) {
         await Deno.writeTextFile(FETCH_TIME_FILE, Date.now().toString());
-        const image = await fetch("https://picsum.photos/1200");
+        const image = await fetch("https://picsum.photos/600");
         await Deno.writeFile(IMAGE_FILE, image.body);
     }
     return await Deno.readFile(IMAGE_FILE);
@@ -28,7 +28,7 @@ app.get("/random-image", async (c) => {
     return c.body(image);
 });
 
-app.get("/", (c) => c.html("<h1>Hello World</h1><img src='/random-image' />"));
+app.get("/", (c) => c.html("<h1>Todo app</h1><img src='/random-image' />"));
 
 const PORT = Deno.env.get("PORT") || 8000;
 Deno.serve({

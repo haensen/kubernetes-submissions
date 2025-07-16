@@ -2,8 +2,7 @@
 
 Deploy:
 ```
-kubectl apply -f manifests
-kubectl apply -f ../log_output/manifests
+kubectl apply -f ../manifests
 ```
 
 GET localhost:8081/pingpong returns "pong [count]"

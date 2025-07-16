@@ -1,13 +1,12 @@
 import { Hono } from "@hono/hono";
 
 const FILE = Deno.env.get("FILE");
-const PING_PONG_FILE = Deno.env.get("PING_PONG_FILE");
 
 const app = new Hono();
 
-app.get("/", (c) => {
+app.get("/", async (c) => {
     const randomContent = Deno.readTextFileSync(FILE);
-    const pingPongContent = Deno.readTextFileSync(PING_PONG_FILE);
+    const pingPongContent = await fetch("http://ping-pong-svc:2345/pings").then(res => res.text());
     return c.text(`${randomContent}\n${pingPongContent}`);
 });
 

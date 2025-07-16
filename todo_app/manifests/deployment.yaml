@@ -14,7 +14,16 @@ spec:
     spec:
       containers:
         - name: todo-app
-          image: hanseni/todo_app:1.5
+          image: hanseni/todo_app:1.12
           env:
             - name: PORT
               value: "3000"
+            - name: IMAGE_PATH
+              value: "/images"
+          volumeMounts:
+            - name: image-volume
+              mountPath: /images
+      volumes:
+        - name: image-volume
+          persistentVolumeClaim:
+            claimName: image-pv-claim

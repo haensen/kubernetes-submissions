@@ -2,7 +2,7 @@
 
 Deploy:
 ```
-kubectl apply -f manifests/
+kubectl apply -f manifests
 ```
 
-Page with 'hello world' should become available at localhost:8081
+Page with 'hello world' and a random image should become available at localhost:8081

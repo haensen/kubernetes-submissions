@@ -15,6 +15,9 @@ spec:
       volumes:
         - name: shared-volume
           emptyDir: {}
+        - name: ping-pong-volume
+          persistentVolumeClaim:
+            claimName: ping-pong-pv-claim
       containers:
         - name: log-output-generator
           image: hanseni/log_output:1.10-generator
@@ -25,12 +28,16 @@ spec:
             - name: shared-volume
               mountPath: /shared
         - name: log-output-server
-          image: hanseni/log_output:1.10-server
+          image: hanseni/log_output:1.11-server
           env:
             - name: PORT
               value: "3000"
             - name: FILE
               value: "/shared/log.txt"
+            - name: PING_PONG_FILE
+              value: "/pingpong/pingpong.txt"
           volumeMounts:
             - name: shared-volume
               mountPath: /shared
+            - name: ping-pong-volume
+              mountPath: /pingpong

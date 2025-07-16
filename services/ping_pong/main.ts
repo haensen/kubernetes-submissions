@@ -2,9 +2,12 @@ import { Hono } from "@hono/hono";
 
 let count = 0;
 
+const FILE = Deno.env.get("FILE");
+
 const app = new Hono();
 
 app.get("/pingpong", (c) => {
+    Deno.writeTextFileSync(FILE, `Ping / Pongs: ${count}`);
     return c.text(`pong ${count++}`);
 });
 

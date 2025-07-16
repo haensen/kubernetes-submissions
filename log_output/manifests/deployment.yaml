@@ -12,9 +12,25 @@ spec:
       labels:
         app: log-output
     spec:
+      volumes:
+        - name: shared-volume
+          emptyDir: {}
       containers:
-        - name: log-output
-          image: hanseni/log_output:1.7
+        - name: log-output-generator
+          image: hanseni/log_output:1.10-generator
+          env:
+            - name: FILE
+              value: "/shared/log.txt"
+          volumeMounts:
+            - name: shared-volume
+              mountPath: /shared
+        - name: log-output-server
+          image: hanseni/log_output:1.10-server
           env:
             - name: PORT
               value: "3000"
+            - name: FILE
+              value: "/shared/log.txt"
+          volumeMounts:
+            - name: shared-volume
+              mountPath: /shared

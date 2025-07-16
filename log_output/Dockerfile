@@ -1,7 +1,11 @@
-FROM denoland/deno:2.2.14
+FROM denoland/deno:alpine-2.3.6
 
 WORKDIR /app
 
-COPY main.ts .
+COPY deno.json .
+
+RUN deno install
+
+COPY . .
 
 CMD ["deno", "run", "--allow-all", "main.ts"] 

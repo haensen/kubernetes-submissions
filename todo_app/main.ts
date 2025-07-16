@@ -28,7 +28,7 @@ app.get("/random-image", async (c) => {
     return c.body(image);
 });
 
-app.get("/", (c) => c.html("<h1>Todo app</h1><img src='/random-image' />"));
+app.get("/", (c) => c.html(Deno.readTextFileSync("frontend.html")));
 
 const PORT = Deno.env.get("PORT") || 8000;
 Deno.serve({

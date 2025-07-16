@@ -5,4 +5,4 @@ Deploy:
 kubectl apply -f manifests
 ```
 
-Page with header 'Todo app' and a random image should become available at localhost:8081
+The todo app becomes available at localhost:8081

@@ -1,10 +1,8 @@
 # Todo app server
 
-Deploy and test:
+Deploy:
 ```
-kubectl apply -f manifests/deployment.yaml
-kubectl port-forward [pod-id] 3003:3000
+kubectl apply -f manifests/
 ```
 
-Testing with docker:
-```docker run -e PORT=4000 -p 4000:4000 hanseni/todo_app:1.5```
+The service should become available in the port which is forwarded to 30080.

@@ -13,3 +13,4 @@ Submissions to the course Devops with Kubernetes 2025
 - [1.6](https://github.com/haensen/kubernetes-submissions/tree/1.6/todo_app)
 - [1.7](https://github.com/haensen/kubernetes-submissions/tree/1.7/log_output)
 - [1.8](https://github.com/haensen/kubernetes-submissions/tree/1.8/todo_app)
+- [1.9](https://github.com/haensen/kubernetes-submissions/tree/1.8/ping_pong)

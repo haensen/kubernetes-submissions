@@ -16,6 +16,12 @@ spec:
       volumes:
         - name: shared-volume
           emptyDir: {}
+        - name: config-volume
+          configMap:
+            name: log-output-config
+            items:
+              - key: FILE_CONTENT
+                path: information.txt
       containers:
         - name: log-output-generator
           image: hanseni/log_output:1.10-generator
@@ -26,12 +32,20 @@ spec:
             - name: shared-volume
               mountPath: /shared
         - name: log-output-server
-          image: hanseni/log_output:2.1-server2
+          image: hanseni/log_output:2.5-server
           env:
             - name: PORT
               value: "3000"
             - name: FILE
               value: "/shared/log.txt"
+            - name: MESSAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: log-output-config
+                  key: MESSAGE
           volumeMounts:
             - name: shared-volume
               mountPath: /shared
+            - name: config-volume
+              mountPath: /config
+              readOnly: true

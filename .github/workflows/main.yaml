@@ -79,5 +79,4 @@ jobs:
           kustomize build . | kubectl apply -f -
           kubectl rollout status deployment $SERVICE1 -n project
           kubectl rollout status deployment $SERVICE2 -n project
-          kubectl rollout status deployment $SERVICE3 -n project
           kubectl get services -o wide -n project

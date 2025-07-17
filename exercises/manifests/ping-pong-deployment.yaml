@@ -15,7 +15,17 @@ spec:
     spec:
       containers:
         - name: ping-pong
-          image: hanseni/ping_pong:2.1
+          image: hanseni/ping_pong:2.7-6
           env:
             - name: PORT
               value: "3000"
+            - name: PGHOST
+              value: "postgres-svc"
+            - name: PGPORT
+              value: "5432"
+            - name: PGUSER
+              value: "postgres"
+            - name: PGPASSWORD
+              value: "password"
+            - name: PGDATABASE
+              value: "postgres"

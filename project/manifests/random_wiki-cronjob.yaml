@@ -11,7 +11,7 @@ spec:
         spec:
           containers:
           - name: random-wiki-todo
-            image: hanseni/random_wiki_todo:2.9-5
+            image: RANDOM-WIKI-TODO-IMAGE
             env:
             - name: TODO_POST_URL
               value: "http://todo-backend-svc:2345/todos"

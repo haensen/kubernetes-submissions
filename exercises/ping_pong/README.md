@@ -2,7 +2,10 @@
 
 Deploy:
 ```
-kubectl apply -f ../manifests
+kubectl apply -f ../manifests/namespace.yaml
+kubectl apply -f ../manifests/ping-pong-deployment.yaml
+kubectl apply -f ../manifests/ping-pong-service.yaml
+kubectl apply -f ../manifests/postgres.yaml
 ```
 
-GET localhost:8081/pingpong returns "pong [count]"
+GET [ping-pong-svc external ip]:2345/pingpong returns "pong [count]"

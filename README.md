@@ -31,3 +31,7 @@ Submissions to the course Devops with Kubernetes 2025
 - [2.8](https://github.com/haensen/kubernetes-submissions/tree/2.8/project)
 - [2.9](https://github.com/haensen/kubernetes-submissions/tree/2.9/project)
 - [2.10](https://github.com/haensen/kubernetes-submissions/tree/2.10/project)
+
+### Chapter 4
+
+- [3.1](https://github.com/haensen/kubernetes-submissions/tree/3.1/exercises/ping_pong)

@@ -23,3 +23,4 @@ Submissions to the course Devops with Kubernetes 2025
 
 - [2.1](https://github.com/haensen/kubernetes-submissions/tree/2.1/services)
 - [2.2](https://github.com/haensen/kubernetes-submissions/tree/2.2/todo_app)
+- [2.3](https://github.com/haensen/kubernetes-submissions/tree/2.3/services)

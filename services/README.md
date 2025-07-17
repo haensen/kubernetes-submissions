@@ -1,5 +1,6 @@
 Deploy log output and ping pong:
 ```sh
+kubectl apply -f manifests/namespace.yaml
 kubectl apply -f manifests
 ```
 

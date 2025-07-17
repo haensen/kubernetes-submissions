@@ -12,12 +12,7 @@ if (result.length === 0) {
 
 const app = new Hono();
 
-// To pass gcloud health check
 app.get("/", async (c) => {
-    return c.text("Hello World");
-});
-
-app.get("/pingpong", async (c) => {
     const result = await sql`SELECT count FROM ping_pong`;
     const count = result[0]?.count + 1;
     await sql`UPDATE ping_pong SET count = ${count}`;

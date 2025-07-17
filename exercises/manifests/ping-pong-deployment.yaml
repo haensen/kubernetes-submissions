@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: ping-pong
-          image: hanseni/ping_pong:3.2
+          image: hanseni/ping_pong:3.4
           env:
             - name: PORT
               value: "3000"

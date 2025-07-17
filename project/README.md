@@ -2,8 +2,7 @@
 
 Deploy:
 ```
-kubectl apply -f manifests/namespace.yaml
-kubectl apply -f manifests
+kubectl apply -k .
 ```
 
-The todo app becomes available at localhost:8081
+The todo app becomes available at [ingress ip]:80

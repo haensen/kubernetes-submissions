@@ -9,6 +9,11 @@ await sql`CREATE TABLE IF NOT EXISTS todos (id SERIAL PRIMARY KEY, description T
 const app = new Hono();
 app.use("*", cors());
 
+// To pass gcloud health check
+app.get("/", async (c) => {
+    return c.text("Hello World");
+});
+
 app.get("/todos", async (c) => {
     return c.json(await sql`SELECT description FROM todos`);
 });

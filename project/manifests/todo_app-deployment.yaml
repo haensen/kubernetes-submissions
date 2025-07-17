@@ -15,12 +15,16 @@ spec:
     spec:
       containers:
         - name: todo-app
-          image: hanseni/todo_app:2.2-4
+          image: hanseni/todo_app:2.6
           env:
             - name: PORT
               value: "3000"
             - name: IMAGE_PATH
               value: "/images"
+            - name: FETCH_TIME_INTERVAL_MINUTES
+              value: "10"
+            - name: PICSUM_PHOTOS_URL
+              value: "https://picsum.photos/600"
           volumeMounts:
             - name: image-volume
               mountPath: /images

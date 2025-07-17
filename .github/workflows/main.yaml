@@ -47,25 +47,25 @@ jobs:
           location: '${{ env.GKE_ZONE }}'
 
       - name : 'Form the image name 1'
-        run: echo "IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/$IMAGE1:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG1=$REGISTRY/$PROJECT_ID/$REPOSITORY/$IMAGE1:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
       - name: Build 1
-        run: docker build --tag $IMAGE_TAG project/$IMAGE1/.
+        run: docker build --tag $IMAGE_TAG1 project/$IMAGE1/.
       - name: Publish 1
-        run: docker push $IMAGE_TAG
+        run: docker push $IMAGE_TAG1
 
       - name : 'Form the image name 2'
-        run: echo "IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/$IMAGE2:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG2=$REGISTRY/$PROJECT_ID/$REPOSITORY/$IMAGE2:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
       - name: Build 2
-        run: docker build --tag $IMAGE_TAG project/$IMAGE2/.
+        run: docker build --tag $IMAGE_TAG2 project/$IMAGE2/.
       - name: Publish 2
-        run: docker push $IMAGE_TAG
+        run: docker push $IMAGE_TAG2
 
       - name : 'Form the image name 3'
-        run: echo "IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/$IMAGE3:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG3=$REGISTRY/$PROJECT_ID/$REPOSITORY/$IMAGE3:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
       - name: Build 3
-        run: docker build --tag $IMAGE_TAG project/$IMAGE3/.
+        run: docker build --tag $IMAGE_TAG3 project/$IMAGE3/.
       - name: Publish 3
-        run: docker push $IMAGE_TAG
+        run: docker push $IMAGE_TAG3
       
       - name: Set up Kustomize
         uses: imranismail/setup-kustomize@v2.1.0

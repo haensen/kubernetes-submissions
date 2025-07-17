@@ -14,7 +14,6 @@ env:
   IMAGE2: todo_backend
   SERVICE2: todo-backend-dep
   IMAGE3: random_wiki_todo
-  SERVICE3: random-wiki-todo
   BRANCH: ${{ github.ref_name }}
 
 jobs:

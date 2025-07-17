@@ -1,4 +1,4 @@
-# Todo app server
+# Todo app project
 
 Deploy:
 ```

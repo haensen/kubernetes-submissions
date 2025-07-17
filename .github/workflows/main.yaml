@@ -37,7 +37,7 @@ jobs:
         run: gcloud info
 
       - name: 'Configure docker to use gcloud'
-        run: gcloud --quiet auth configure-docker
+        run: gcloud --quiet auth configure-docker $REGISTRY
 
       - name: 'Get GKE credentials'
         uses: 'google-github-actions/get-gke-credentials@v2'

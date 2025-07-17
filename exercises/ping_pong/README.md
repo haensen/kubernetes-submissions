@@ -8,4 +8,4 @@ kubectl apply -f ../manifests/ping-pong-service.yaml
 kubectl apply -f ../manifests/postgres.yaml
 ```
 
-GET [ping-pong-svc external ip]:2345/pingpong returns "pong [count]"
+GET [ping-pong-svc external ip]:80/pingpong returns "pong [count]"

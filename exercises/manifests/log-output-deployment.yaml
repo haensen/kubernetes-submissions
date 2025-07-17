@@ -32,7 +32,7 @@ spec:
             - name: shared-volume
               mountPath: /shared
         - name: log-output-server
-          image: hanseni/log_output:2.5-server
+          image: hanseni/log_output:3.2-server
           env:
             - name: PORT
               value: "3000"

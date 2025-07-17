@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: todo-backend
-          image: hanseni/todo_backend:2.8-2
+          image: hanseni/todo_backend:2.10
           env:
             - name: PORT
               value: "3000"

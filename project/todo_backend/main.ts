@@ -15,6 +15,12 @@ app.get("/todos", async (c) => {
 
 app.post("/todos", async (c) => {
     const todo = await c.req.json();
+    console.log(`POST /todos: ${JSON.stringify(todo)}`);
+    if (!todo.description || todo.description.length > 140) {
+        console.log("Invalid todo");
+        return c.json({ error: "Description is required and must be less than 140 characters" }, 400);
+    }
+    console.log(`Inserting todo`);
     await sql`INSERT INTO todos (description) VALUES (${todo.description})`;
     return c.json(todo);
 });

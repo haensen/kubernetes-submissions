@@ -5,6 +5,7 @@ resources:
   - manifests/persistentvolumeclaim.yaml
   - manifests/postgres-config.yaml
   - manifests/postgres.yaml
+  - manifests/db_backup-cronjob.yaml
   - manifests/random_wiki-cronjob.yaml
   - manifests/todo_app-deployment.yaml
   - manifests/todo_app-service.yaml
@@ -18,3 +19,5 @@ images:
     newName: hanseni/todo_backend:3.5
   - name: RANDOM-WIKI-TODO-IMAGE
     newName: hanseni/random_wiki_todo:2.9-5
+  - name: DB-BACKUP-IMAGE
+    newName: hanseni/db_backup:3.10-7

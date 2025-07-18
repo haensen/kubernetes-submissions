@@ -7,6 +7,12 @@ kubectl apply -k .
 
 The todo app becomes available at [ingress ip]:80
 
+## Setting up database backups
+A secret needs to be created with service account credentials. The service account should have Storage Object User IAM role.
+```sh
+kubectl create secret generic db-backup-sa --from-file=credentials.json=your_sa.json
+```
+
 ## Pros/cons of using DBaaS vs DIY
 
 ### Reasons to use DBaaS

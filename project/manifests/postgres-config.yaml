@@ -8,6 +8,7 @@ data:
   POSTGRES_DB: "postgres"
   POSTGRES_HOST: "postgres-svc"
   POSTGRES_PORT: "5432"
+  POSTGRES_URL: "postgres://postgres:password@postgres-svc:5432/postgres"
 ---
 apiVersion: v1
 kind: Secret

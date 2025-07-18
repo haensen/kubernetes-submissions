@@ -1,0 +1,34 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: db-backup
+  namespace: project
+spec:
+  schedule: "0 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          volumes:
+            - name: sa-volume
+              secret:
+                secretName: db-backup-sa
+                items:
+                  - key: credentials.json
+                    path: credentials.json
+          containers:
+          - name: db-backup
+            image: DB-BACKUP-IMAGE
+            env:
+            - name: URL
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_URL
+            - name: BUCKET_NAME
+              value: "backup-bucket-56156"
+            volumeMounts:
+              - name: sa-volume
+                mountPath: /creds
+                readOnly: true
+          restartPolicy: Never

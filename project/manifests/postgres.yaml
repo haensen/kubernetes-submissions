@@ -35,6 +35,13 @@ spec:
           ports:
             - name: postgres
               containerPort: 5432
+          resources:
+            requests:
+              cpu: 10m
+              memory: 50Mi
+            limits:
+              cpu: 100m
+              memory: 100Mi
           env:
           - name: POSTGRES_PASSWORD
             valueFrom:

@@ -12,6 +12,13 @@ spec:
           containers:
           - name: random-wiki-todo
             image: RANDOM-WIKI-TODO-IMAGE
+            resources:
+              requests:
+                cpu: 10m
+                memory: 50Mi
+              limits:
+                cpu: 100m
+                memory: 100Mi
             env:
             - name: TODO_POST_URL
               value: "http://todo-backend-svc:2345/todos"

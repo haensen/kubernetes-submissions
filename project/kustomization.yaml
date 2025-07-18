@@ -20,4 +20,4 @@ images:
   - name: RANDOM-WIKI-TODO-IMAGE
     newName: hanseni/random_wiki_todo:2.9-5
   - name: DB-BACKUP-IMAGE
-    newName: hanseni/db_backup:3.10-7
+    newName: hanseni/db_backup:3.10-8

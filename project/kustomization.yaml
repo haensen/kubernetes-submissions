@@ -11,7 +11,8 @@ resources:
   - manifests/todo_app-service.yaml
   - manifests/todo_backend-deployment.yaml
   - manifests/todo_backend-service.yaml
-  - manifests/ingress.yaml
+  - manifests/gateway.yaml
+  - manifests/routes.yaml
 images:
   - name: TODO-APP-IMAGE
     newName: hanseni/todo_app:2.6

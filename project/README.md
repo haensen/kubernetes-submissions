@@ -1,11 +1,16 @@
 # Todo app project
 
+Update the cluster with the gateway-api if needed
+```sh
+gcloud container clusters update [clustername] --location=europe-north1-b --gateway-api=standard
+```
+
 Deploy:
 ```
 kubectl apply -k .
 ```
 
-The todo app becomes available at [ingress ip]:80
+The todo app becomes available at [gateway ip]:80
 
 ## Setting up database backups
 A secret needs to be created with service account credentials. The service account should have Storage Object User IAM role.

@@ -15,9 +15,9 @@ resources:
   - manifests/routes.yaml
 images:
   - name: TODO-APP-IMAGE
-    newName: hanseni/todo_app:2.6
+    newName: hanseni/todo_app:4.5-2
   - name: TODO-BACKEND-IMAGE
-    newName: hanseni/todo_backend:4.2-2
+    newName: hanseni/todo_backend:4.5
   - name: RANDOM-WIKI-TODO-IMAGE
     newName: hanseni/random_wiki_todo:2.9-5
   - name: DB-BACKUP-IMAGE

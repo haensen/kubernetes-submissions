@@ -12,6 +12,9 @@
     <button id="add-todo-button" onclick="sendTodo()">Send</button>
     <ul id="todo-list">
     </ul>
+    <h3>Completed todos</h3>
+    <ul id="completed-todo-list">
+    </ul>
     <script>
         async function updateTodos() {
             const todos = await fetch("/todos", {
@@ -21,11 +24,27 @@
                 }
             }).then(response => response.json());
             const todoList = document.getElementById("todo-list");
+            const completedTodoList = document.getElementById("completed-todo-list");
             todoList.innerHTML = "";
+            completedTodoList.innerHTML = "";
             todos.forEach(todo => {
                 const li = document.createElement("li");
-                li.textContent = todo.description;
-                todoList.appendChild(li);
+                li.appendChild(document.createTextNode(todo.description));
+                if (todo.completed) {
+                    completedTodoList.appendChild(li);
+                } else {
+                    const markDoneButton = document.createElement("button");
+                    markDoneButton.style.marginLeft = "10px";
+                    markDoneButton.textContent = "Mark done";
+                    markDoneButton.onclick = () => {
+                        fetch(`/todos/${todo.id}`, {
+                            method: "PUT",
+                            body: JSON.stringify({ ...todo, completed: true })
+                        }).then(updateTodos);
+                    };
+                    li.appendChild(markDoneButton);
+                    todoList.appendChild(li);
+                }
             });
         }
         function sendTodo() {

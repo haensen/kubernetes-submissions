@@ -7,7 +7,7 @@ const sql = postgres();
 let ready = false;
 while (!ready) {
     try {
-        await sql`CREATE TABLE IF NOT EXISTS todos (id SERIAL PRIMARY KEY, description TEXT)`;
+        await sql`CREATE TABLE IF NOT EXISTS todos (id SERIAL PRIMARY KEY, description TEXT, completed BOOLEAN)`;
         ready = true;
     } catch (e) {
         console.error(e);
@@ -34,7 +34,7 @@ app.get("/", async (c) => {
 });
 
 app.get("/todos", async (c) => {
-    return c.json(await sql`SELECT description FROM todos`);
+    return c.json(await sql`SELECT * FROM todos`);
 });
 
 app.post("/todos", async (c) => {
@@ -45,8 +45,15 @@ app.post("/todos", async (c) => {
         return c.json({ error: "Description is required and must be less than 140 characters" }, 400);
     }
     console.log(`Inserting todo`);
-    await sql`INSERT INTO todos (description) VALUES (${todo.description})`;
-    return c.json(todo);
+    const result = await sql`INSERT INTO todos (description, completed) VALUES (${todo.description}, FALSE) RETURNING *`;
+    return c.json(result);
+});
+
+app.put("/todos/:id", async (c) => {
+    const id = c.req.param("id");
+    const todo = await c.req.json();
+    const result = await sql`UPDATE todos SET description = ${todo.description}, completed = ${todo.completed} WHERE id = ${id} RETURNING *`;
+    return c.json(result);
 });
 
 const PORT = Deno.env.get("PORT") || 8000;

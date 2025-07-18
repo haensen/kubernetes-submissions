@@ -40,3 +40,4 @@ Submissions to the course Devops with Kubernetes 2025
 - [3.4](https://github.com/haensen/kubernetes-submissions/tree/3.4/exercises)
 - [3.5](https://github.com/haensen/kubernetes-submissions/tree/3.5/project)
 - [3.6](https://github.com/haensen/kubernetes-submissions/tree/3.6/project)
+- [3.7](https://github.com/haensen/kubernetes-submissions/tree/3.7/.github/workflows)

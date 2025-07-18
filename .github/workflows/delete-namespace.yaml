@@ -41,10 +41,10 @@ jobs:
 
       - name: 'Get namespace name'
         run: |-
-          if [ "${GITHUB_REF#refs/heads/}" == "main" ]; then
+          if [ "${{ env.BRANCH }}" == "main" ]; then
             echo "NAMESPACE=project" >> $GITHUB_ENV;
           else
-            echo "NAMESPACE=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV;
+            echo "NAMESPACE=${{ env.BRANCH }}" >> $GITHUB_ENV;
           fi
 
       - name: Delete namespace

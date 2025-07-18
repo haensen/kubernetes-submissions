@@ -46,3 +46,7 @@ Submissions to the course Devops with Kubernetes 2025
 - [3.10](https://github.com/haensen/kubernetes-submissions/tree/3.10/project)
 - [3.11](https://github.com/haensen/kubernetes-submissions/tree/3.11/project)
 - [3.12](https://github.com/haensen/kubernetes-submissions/tree/3.12/project/todo_backend/gcloud_logs_when_todo_added.png)
+
+### Chapter 5
+
+- [4.1](https://github.com/haensen/kubernetes-submissions/tree/4.1/exercises)

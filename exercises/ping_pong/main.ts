@@ -3,7 +3,15 @@ import postgres from "postgres";
 
 const sql = postgres();
 
-await sql`CREATE TABLE IF NOT EXISTS ping_pong (count INTEGER)`;
+while (true) {
+    try {
+        await sql`CREATE TABLE IF NOT EXISTS ping_pong (count INTEGER)`;
+        break;
+    } catch (e) {
+        console.error(e);
+    }
+    await new Promise(resolve => setTimeout(resolve, 500));
+}
 
 const result = await sql`SELECT count FROM ping_pong`;
 if (result.length === 0) {
@@ -23,6 +31,10 @@ app.get("/pings", async (c) => {
     const result = await sql`SELECT count FROM ping_pong`;
     const count = result[0]?.count ?? 0;
     return c.text(`Ping / Pongs: ${count}`);
+});
+
+app.get("/healthz", (c) => {
+    return c.text("OK");
 });
 
 const PORT = Deno.env.get("PORT") || 8000;

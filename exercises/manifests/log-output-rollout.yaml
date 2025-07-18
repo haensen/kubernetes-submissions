@@ -1,13 +1,25 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 metadata:
-  name: log-output-dep
+  name: log-output-rollout
   namespace: exercises
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: log-output
+  strategy:
+    canary:
+      analysis:
+        templates:
+        - templateName: cpu-rate
+      steps:
+        - setWeight: 33
+        - pause:
+            duration: 1m
+        - setWeight: 66
+        - pause:
+            duration: 5m
   template:
     metadata:
       labels:
@@ -49,6 +61,8 @@ spec:
                 configMapKeyRef:
                   name: log-output-config
                   key: MESSAGE
+            - name: TEST_VALUE_TO_TRIGGER_ROLLOUT
+              value: "4ee"
           volumeMounts:
             - name: shared-volume
               mountPath: /shared

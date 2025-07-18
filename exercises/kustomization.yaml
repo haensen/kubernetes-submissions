@@ -3,9 +3,10 @@ kind: Kustomization
 resources:
   - manifests/namespace.yaml
   - manifests/configmap.yaml
-  - manifests/log-output-deployment.yaml
+  - manifests/analysistemplate.yaml
+  - manifests/log-output-rollout.yaml
   - manifests/log-output-service.yaml
-  - manifests/ping-pong-deployment.yaml
+  - manifests/ping-pong-rollout.yaml
   - manifests/ping-pong-service.yaml
   - manifests/postgres.yaml
   - manifests/gateway.yaml

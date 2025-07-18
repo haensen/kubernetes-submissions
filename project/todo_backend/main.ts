@@ -4,10 +4,29 @@ import postgres from "postgres";
 
 const sql = postgres();
 
-await sql`CREATE TABLE IF NOT EXISTS todos (id SERIAL PRIMARY KEY, description TEXT)`;
+let ready = false;
+while (!ready) {
+    try {
+        await sql`CREATE TABLE IF NOT EXISTS todos (id SERIAL PRIMARY KEY, description TEXT)`;
+        ready = true;
+    } catch (e) {
+        console.error(e);
+        await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+}
 
 const app = new Hono();
 app.use("*", cors());
+
+app.get("/healthz", async (c) => {
+    try {
+        await sql`SELECT 1`;
+    } catch (e) {
+        console.error(e);
+        return c.text("ERROR", 500);
+    }
+    return c.text("OK");
+});
 
 // To pass gcloud health check
 app.get("/", async (c) => {

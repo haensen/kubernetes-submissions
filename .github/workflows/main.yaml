@@ -2,6 +2,13 @@ name: Release application
 
 on:
   push:
+    branches:
+      - "**"
+    paths:
+      - "project/**"
+      - ".github/workflows/main.yaml"
+    tags:
+      - "!**" # Don't trigger on releases
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
@@ -69,9 +76,20 @@ jobs:
       - name: Set up Kustomize
         uses: imranismail/setup-kustomize@v2.1.0
 
+      - name: 'Get namespace name'
+        run: |-
+          if [ "${GITHUB_REF#refs/heads/}" == "main" ]; then
+            echo "NAMESPACE=project" >> $GITHUB_ENV;
+          else
+            echo "NAMESPACE=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV;
+          fi
+
       - name: Deploy
         run: |-
           cd project
+          kubectl create namespace $NAMESPACE || true
+          kubectl config set-context --current --namespace=$NAMESPACE
+          kustomize edit set namespace $NAMESPACE
           kustomize edit set image TODO-APP-IMAGE=$IMAGE_TAG1
           kustomize edit set image TODO-BACKEND-IMAGE=$IMAGE_TAG2
           kustomize edit set image RANDOM-WIKI-TODO-IMAGE=$IMAGE_TAG3

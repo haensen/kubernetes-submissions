@@ -17,17 +17,17 @@ resources:
 images:
 - name: BROADCASTER-IMAGE
   newName: hanseni/broadcaster
-  newTag: 6dda5e0c6eb480676a77e712c1e9bca9930bbd14
+  newTag: 8b45cc17c064aaa2c3c0e5023458066758a23cfc
 - name: DB-BACKUP-IMAGE
   newName: hanseni/db_backup
-  newTag: 6dda5e0c6eb480676a77e712c1e9bca9930bbd14
+  newTag: 8b45cc17c064aaa2c3c0e5023458066758a23cfc
 - name: RANDOM-WIKI-TODO-IMAGE
   newName: hanseni/random_wiki_todo
-  newTag: 6dda5e0c6eb480676a77e712c1e9bca9930bbd14
+  newTag: 8b45cc17c064aaa2c3c0e5023458066758a23cfc
 - name: TODO-APP-IMAGE
   newName: hanseni/todo_app
-  newTag: 6dda5e0c6eb480676a77e712c1e9bca9930bbd14
+  newTag: 8b45cc17c064aaa2c3c0e5023458066758a23cfc
 - name: TODO-BACKEND-IMAGE
   newName: hanseni/todo_backend
-  newTag: 6dda5e0c6eb480676a77e712c1e9bca9930bbd14
+  newTag: 8b45cc17c064aaa2c3c0e5023458066758a23cfc
 namespace: project

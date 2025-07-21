@@ -1,0 +1,7 @@
+{
+    "imports": {
+        "@hono/hono": "jsr:@hono/hono@4.6.5",
+        "nats": "npm:nats@2.29.3",
+        "uuid": "npm:uuid@11.1.0"
+    }
+}

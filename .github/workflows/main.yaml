@@ -20,7 +20,8 @@ env:
   SERVICE1: todo-app-dep
   IMAGE2: todo_backend
   SERVICE2: todo-backend-dep
-  IMAGE3: db_backup
+  IMAGE3: broadcaster
+  SERVICE3: broadcaster-dep
   BRANCH: ${{ github.ref_name }}
 
 jobs:
@@ -92,8 +93,9 @@ jobs:
           kustomize edit set namespace $NAMESPACE
           kustomize edit set image TODO-APP-IMAGE=$IMAGE_TAG1
           kustomize edit set image TODO-BACKEND-IMAGE=$IMAGE_TAG2
-          kustomize edit set image DB-BACKUP-IMAGE=$IMAGE_TAG3
+          kustomize edit set image BROADCASTER-IMAGE=$IMAGE_TAG3
           kustomize build . | kubectl apply -f -
           kubectl rollout status deployment $SERVICE1 -n $NAMESPACE
           kubectl rollout status deployment $SERVICE2 -n $NAMESPACE
+          kubectl rollout status deployment $SERVICE3 -n $NAMESPACE
           kubectl get services -o wide -n $NAMESPACE

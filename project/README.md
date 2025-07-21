@@ -1,22 +1,62 @@
 # Todo app project
 
-Update the cluster with the gateway-api if needed
+## Deploying
+#### Update the cluster with the gateway-api if needed
 ```sh
 gcloud container clusters update [clustername] --location=europe-north1-b --gateway-api=standard
 ```
 
-Deploy:
+#### Add prometheus:
+```sh
+# Adding these repos might not be necessary if it has been done before
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo add stable https://charts.helm.sh/stable
+helm repo update
+
+kubectl create namespace prometheus
+helm install prometheus-community/kube-prometheus-stack --generate-name --namespace prometheus
 ```
+
+#### Deploy the todo-app
+```sh
 kubectl apply -k .
 ```
 
-The todo app becomes available at [gateway ip]:80
+#### Setup NATS
+```sh
+kubens project
+helm install -f manifests/nats-settings.yaml my-nats oci://registry-1.docker.io/bitnamicharts/nats
+```
 
-## Setting up database backups
+#### Configure Prometheus to fetch metrics for NATS (optional)
+Get the description for prometheus object
+```sh
+kubectl -n prometheus get prometheus
+kubectl -n prometheus describe prometheus [instance name like: kube-prometheus-stack-1753-prometheus]
+```
+```
+Service Monitor Selector:
+    Match Labels:
+      Release:  kube-prometheus-stack-1753088080
+```
+Attach the label to my-nats-metrics
+```sh
+kubectl label servicemonitors.monitoring.coreos.com -n prometheus my-nats-metrics release=kube-prometheus-stack-1753088080
+```
+[Grafana dashboard](https://raw.githubusercontent.com/nats-io/prometheus-nats-exporter/5084a32850823b59069f21f3a7dde7e488fef1c6/walkthrough/grafana-nats-dash.json)
+
+#### Setting up database backups. (optional)
 A secret needs to be created with service account credentials. The service account should have Storage Object User IAM role.
 ```sh
 kubectl create secret generic db-backup-sa --from-file=credentials.json=your_sa.json
 ```
+
+#### Setting up a webhook that is called when a todo is added or changed. (optional)
+```sh
+kubectl set env deployment.apps/broadcaster-dep WEBHOOK_URL=[your webhook url]
+```
+
+The todo app becomes available at [gateway ip]:80
 
 ## Pros/cons of using DBaaS vs DIY
 

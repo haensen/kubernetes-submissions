@@ -152,5 +152,5 @@ jobs:
       - name: Commit edited kustomization.yaml
         uses: EndBug/add-and-commit@v9
         with:
-          add: 'kustomization.yaml'
-          message: Kustomize.yaml updated to use the new images ${{ github.sha }}
+          add: 'exercises/kustomization.yaml'
+          message: kustomization.yaml updated to use the new images from ${{ github.sha }}

@@ -12,15 +12,9 @@ on:
       - "!**" # Don't trigger on releases
 
 env:
-  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
-  GKE_CLUSTER: dwk-cluster
-  GKE_ZONE: europe-north1-b
-  REGISTRY: europe-north1-docker.pkg.dev
-  REPOSITORY: my-repo
   LOG_OUTPUT_GENERATOR: log_output/generator
   LOG_OUTPUT_SERVER: log_output/server
   PING_PONG: ping_pong
-  BRANCH: ${{ github.ref_name }}
   NAMESPACE: exercises
 
 jobs:
@@ -37,24 +31,14 @@ jobs:
         with:
           credentials_json: '${{ secrets.GKE_SA_KEY }}'
 
-      - name: 'Set up Cloud SDK'
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: 'Use gcloud CLI'
-        run: gcloud info
-
-      - name: 'Configure docker to use gcloud'
-        run: gcloud --quiet auth configure-docker $REGISTRY
-
-      - name: 'Get GKE credentials'
-        uses: 'google-github-actions/get-gke-credentials@v2'
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
         with:
-          cluster_name: '${{ env.GKE_CLUSTER }}'
-          project_id: '${{ env.PROJECT_ID }}'
-          location: '${{ env.GKE_ZONE }}'
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name : 'Form the image name 1'
-        run: echo "IMAGE_TAG1=$REGISTRY/$PROJECT_ID/$REPOSITORY/$LOG_OUTPUT_GENERATOR:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG1=hanseni/log_output_generator:$GITHUB_SHA" >> $GITHUB_ENV
       - name: Build 1
         run: docker build --tag $IMAGE_TAG1 exercises/$LOG_OUTPUT_GENERATOR/.
       - name: Publish 1
@@ -72,28 +56,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - uses: google-github-actions/auth@v2
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
         with:
-          credentials_json: '${{ secrets.GKE_SA_KEY }}'
-
-      - name: 'Set up Cloud SDK'
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: 'Use gcloud CLI'
-        run: gcloud info
-
-      - name: 'Configure docker to use gcloud'
-        run: gcloud --quiet auth configure-docker $REGISTRY
-
-      - name: 'Get GKE credentials'
-        uses: 'google-github-actions/get-gke-credentials@v2'
-        with:
-          cluster_name: '${{ env.GKE_CLUSTER }}'
-          project_id: '${{ env.PROJECT_ID }}'
-          location: '${{ env.GKE_ZONE }}'
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name : 'Form the image name 2'
-        run: echo "IMAGE_TAG2=$REGISTRY/$PROJECT_ID/$REPOSITORY/$LOG_OUTPUT_SERVER:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG2=hanseni/log_output_server:$GITHUB_SHA" >> $GITHUB_ENV
       - name: Build 2
         run: docker build --tag $IMAGE_TAG2 exercises/$LOG_OUTPUT_SERVER/.
       - name: Publish 2
@@ -111,28 +81,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - uses: google-github-actions/auth@v2
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
         with:
-          credentials_json: '${{ secrets.GKE_SA_KEY }}'
-
-      - name: 'Set up Cloud SDK'
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: 'Use gcloud CLI'
-        run: gcloud info
-
-      - name: 'Configure docker to use gcloud'
-        run: gcloud --quiet auth configure-docker $REGISTRY
-
-      - name: 'Get GKE credentials'
-        uses: 'google-github-actions/get-gke-credentials@v2'
-        with:
-          cluster_name: '${{ env.GKE_CLUSTER }}'
-          project_id: '${{ env.PROJECT_ID }}'
-          location: '${{ env.GKE_ZONE }}'
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name : 'Form the image name 3'
-        run: echo "IMAGE_TAG3=$REGISTRY/$PROJECT_ID/$REPOSITORY/$PING_PONG:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG3=hanseni/ping_pong:$GITHUB_SHA" >> $GITHUB_ENV
       - name: Build 3
         run: docker build --tag $IMAGE_TAG3 exercises/$PING_PONG/.
       - name: Publish 3

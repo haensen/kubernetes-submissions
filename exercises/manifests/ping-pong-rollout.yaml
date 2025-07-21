@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         - name: ping-pong
-          image: hanseni/ping_pong:4.1
+          image: PING-PONG-IMAGE
           readinessProbe:
             httpGet:
               path: /healthz

@@ -16,14 +16,15 @@ env:
   GKE_ZONE: europe-north1-b
   REGISTRY: europe-north1-docker.pkg.dev
   REPOSITORY: my-repo
-  IMAGE1: log_output
-  IMAGE2: ping_pong
+  LOG_OUTPUT_GENERATOR: log_output/generator
+  LOG_OUTPUT_SERVER: log_output/server
+  PING_PONG: ping_pong
   BRANCH: ${{ github.ref_name }}
   NAMESPACE: exercises
 
 jobs:
-  build-log-output-image:
-    name: Build log output
+  build-log-output-generator-image:
+    name: Build log output generator
     runs-on: ubuntu-latest
 
     steps:
@@ -51,11 +52,46 @@ jobs:
           location: '${{ env.GKE_ZONE }}'
 
       - name : 'Form the image name 1'
-        run: echo "IMAGE_TAG1=$REGISTRY/$PROJECT_ID/$REPOSITORY/$IMAGE1:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG1=$REGISTRY/$PROJECT_ID/$REPOSITORY/$LOG_OUTPUT_GENERATOR:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
       - name: Build 1
-        run: docker build --tag $IMAGE_TAG1 exercises/$IMAGE1/.
+        run: docker build --tag $IMAGE_TAG1 exercises/$LOG_OUTPUT_GENERATOR/.
       - name: Publish 1
         run: docker push $IMAGE_TAG1
+
+  build-log-output-server-image:
+    name: Build log output server
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GKE_SA_KEY }}'
+
+      - name: 'Set up Cloud SDK'
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: 'Use gcloud CLI'
+        run: gcloud info
+
+      - name: 'Configure docker to use gcloud'
+        run: gcloud --quiet auth configure-docker $REGISTRY
+
+      - name: 'Get GKE credentials'
+        uses: 'google-github-actions/get-gke-credentials@v2'
+        with:
+          cluster_name: '${{ env.GKE_CLUSTER }}'
+          project_id: '${{ env.PROJECT_ID }}'
+          location: '${{ env.GKE_ZONE }}'
+
+      - name : 'Form the image name 2'
+        run: echo "IMAGE_TAG2=$REGISTRY/$PROJECT_ID/$REPOSITORY/$LOG_OUTPUT_SERVER:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
+      - name: Build 2
+        run: docker build --tag $IMAGE_TAG2 exercises/$LOG_OUTPUT_SERVER/.
+      - name: Publish 2
+        run: docker push $IMAGE_TAG2
 
   build-ping-pong-image:
     name: Build ping pong
@@ -85,17 +121,17 @@ jobs:
           project_id: '${{ env.PROJECT_ID }}'
           location: '${{ env.GKE_ZONE }}'
 
-      - name : 'Form the image name 2'
-        run: echo "IMAGE_TAG2=$REGISTRY/$PROJECT_ID/$REPOSITORY/$IMAGE2:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
-      - name: Build 2
-        run: docker build --tag $IMAGE_TAG2 exercises/$IMAGE2/.
-      - name: Publish 2
-        run: docker push $IMAGE_TAG2
+      - name : 'Form the image name 3'
+        run: echo "IMAGE_TAG3=$REGISTRY/$PROJECT_ID/$REPOSITORY/$PING_PONG:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
+      - name: Build 3
+        run: docker build --tag $IMAGE_TAG3 exercises/$PING_PONG/.
+      - name: Publish 3
+        run: docker push $IMAGE_TAG3
 
   update-kustomization-yaml:
     name: Update kustomization to use the new images
     runs-on: ubuntu-latest
-    needs: [build-log-output-image, build-ping-pong-image]
+    needs: [build-log-output-generator-image, build-log-output-server-image, build-ping-pong-image]
 
     steps:
       - name: Set up Kustomize
@@ -105,8 +141,9 @@ jobs:
         run: |-
           cd exercises
           kustomize edit set namespace $NAMESPACE
-          kustomize edit set image LOG-OUTPUT-IMAGE=$IMAGE_TAG1
-          kustomize edit set image PING-PONG-IMAGE=$IMAGE_TAG2
+          kustomize edit set image LOG-OUTPUT-GENERATOR-IMAGE=$IMAGE_TAG1
+          kustomize edit set image LOG-OUTPUT-SERVER-IMAGE=$IMAGE_TAG2
+          kustomize edit set image PING-PONG-IMAGE=$IMAGE_TAG3
           kustomize build . | kubectl apply -f -
 
       - name: Commit edited kustomization.yaml

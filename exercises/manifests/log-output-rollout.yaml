@@ -36,7 +36,7 @@ spec:
                 path: information.txt
       containers:
         - name: log-output-generator
-          image: hanseni/log_output:1.10-generator
+          image: LOG-OUTPUT-GENERATOR-IMAGE
           env:
             - name: FILE
               value: "/shared/log.txt"
@@ -44,7 +44,7 @@ spec:
             - name: shared-volume
               mountPath: /shared
         - name: log-output-server
-          image: hanseni/log_output:4.1-server
+          image: LOG-OUTPUT-SERVER-IMAGE
           readinessProbe:
             httpGet:
               path: /healthz

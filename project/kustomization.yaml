@@ -1,27 +1,33 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - manifests/namespace.yaml
-  - manifests/persistentvolumeclaim.yaml
-  - manifests/postgres-config.yaml
-  - manifests/postgres.yaml
-  - manifests/db_backup-cronjob.yaml
-  - manifests/random_wiki-cronjob.yaml
-  - manifests/todo_app-deployment.yaml
-  - manifests/todo_app-service.yaml
-  - manifests/todo_backend-deployment.yaml
-  - manifests/todo_backend-service.yaml
-  - manifests/broadcaster-deployment.yaml
-  - manifests/gateway.yaml
-  - manifests/routes.yaml
+- manifests/namespace.yaml
+- manifests/persistentvolumeclaim.yaml
+- manifests/postgres-config.yaml
+- manifests/postgres.yaml
+- manifests/db_backup-cronjob.yaml
+- manifests/random_wiki-cronjob.yaml
+- manifests/todo_app-deployment.yaml
+- manifests/todo_app-service.yaml
+- manifests/todo_backend-deployment.yaml
+- manifests/todo_backend-service.yaml
+- manifests/broadcaster-deployment.yaml
+- manifests/gateway.yaml
+- manifests/routes.yaml
 images:
-  - name: TODO-APP-IMAGE
-    newName: hanseni/todo_app:4.5-2
-  - name: TODO-BACKEND-IMAGE
-    newName: hanseni/todo_backend:4.6-3
-  - name: RANDOM-WIKI-TODO-IMAGE
-    newName: hanseni/random_wiki_todo:2.9-5
-  - name: DB-BACKUP-IMAGE
-    newName: hanseni/db_backup:3.10-8
-  - name: BROADCASTER-IMAGE
-    newName: hanseni/broadcaster:4.6-8
+- name: BROADCASTER-IMAGE
+  newName: hanseni/broadcaster
+  newTag: 6dda5e0c6eb480676a77e712c1e9bca9930bbd14
+- name: DB-BACKUP-IMAGE
+  newName: hanseni/db_backup
+  newTag: 6dda5e0c6eb480676a77e712c1e9bca9930bbd14
+- name: RANDOM-WIKI-TODO-IMAGE
+  newName: hanseni/random_wiki_todo
+  newTag: 6dda5e0c6eb480676a77e712c1e9bca9930bbd14
+- name: TODO-APP-IMAGE
+  newName: hanseni/todo_app
+  newTag: 6dda5e0c6eb480676a77e712c1e9bca9930bbd14
+- name: TODO-BACKEND-IMAGE
+  newName: hanseni/todo_backend
+  newTag: 6dda5e0c6eb480676a77e712c1e9bca9930bbd14
+namespace: project

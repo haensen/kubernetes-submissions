@@ -1,20 +1,18 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - manifests/namespace.yaml
-  - manifests/configmap.yaml
-  - manifests/analysistemplate.yaml
-  - manifests/log-output-rollout.yaml
-  - manifests/log-output-service.yaml
-  - manifests/ping-pong-rollout.yaml
-  - manifests/ping-pong-service.yaml
-  - manifests/postgres.yaml
-  - manifests/gateway.yaml
-  - manifests/routes.yaml
+- manifests/namespace.yaml
+- manifests/configmap.yaml
+- manifests/analysistemplate.yaml
+- manifests/log-output-rollout.yaml
+- manifests/log-output-service.yaml
+- manifests/ping-pong-rollout.yaml
+- manifests/ping-pong-service.yaml
+- manifests/postgres.yaml
+- manifests/gateway.yaml
+- manifests/routes.yaml
 images:
-  - name: LOG-OUTPUT-GENERATOR-IMAGE
-    newName: hanseni/log_output:1.10-generator
-  - name: LOG-OUTPUT-SERVER-IMAGE
-    newName: hanseni/log_output:4.1-server
-  - name: PING-PONG-IMAGE
-    newName: hanseni/ping_pong:4.1
+- name: LOG-OUTPUT-GENERATOR-IMAGE
+- name: LOG-OUTPUT-SERVER-IMAGE
+- name: PING-PONG-IMAGE
+namespace: exercises

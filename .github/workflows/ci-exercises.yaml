@@ -7,7 +7,7 @@ on:
     paths:
       - "!exercises/kustomization.yaml"
       - "exercises/**"
-      - ".github/workflows/cicd-exercises.yaml"
+      - ".github/workflows/ci-exercises.yaml"
     tags:
       - "!**" # Don't trigger on releases
 

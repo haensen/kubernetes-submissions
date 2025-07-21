@@ -1,6 +1,6 @@
 # Log output and ping pong exercises
 
-```.github/workflows/cicd-exercises.yaml``` updates the configs to use the latest images automatically after commit.
+```.github/workflows/ci-exercises.yaml``` updates the configs to use the latest images automatically after commit.
 
 ## Deploying
 

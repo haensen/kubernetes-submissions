@@ -61,7 +61,7 @@ jobs:
         run: docker push $IMAGE_TAG1
       - name: Output the image tag
         id: image_tag
-        run: echo "$IMAGE_TAG1" >> $GITHUB_OUTPUT
+        run: echo "IMAGE_TAG1=$IMAGE_TAG1" >> $GITHUB_OUTPUT
 
   build-log-output-server-image:
     name: Build log output server
@@ -100,7 +100,7 @@ jobs:
         run: docker push $IMAGE_TAG2
       - name: Output the image tag
         id: image_tag
-        run: echo "$IMAGE_TAG2" >> $GITHUB_OUTPUT
+        run: echo "IMAGE_TAG2=$IMAGE_TAG2" >> $GITHUB_OUTPUT
 
   build-ping-pong-image:
     name: Build ping pong
@@ -139,7 +139,7 @@ jobs:
         run: docker push $IMAGE_TAG3
       - name: Output the image tag
         id: image_tag
-        run: echo "$IMAGE_TAG3" >> $GITHUB_OUTPUT
+        run: echo "IMAGE_TAG3=$IMAGE_TAG3" >> $GITHUB_OUTPUT
 
   update-kustomization-yaml:
     name: Update kustomization to use the new images

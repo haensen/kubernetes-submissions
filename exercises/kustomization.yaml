@@ -14,11 +14,11 @@ resources:
 images:
 - name: LOG-OUTPUT-GENERATOR-IMAGE
   newName: hanseni/log_output_generator
-  newTag: 94b55d85d8e5bf135e39df7698db5b987d062f7f
+  newTag: dc3f84f94bf82d84caf49e7f4a59da0366676b27
 - name: LOG-OUTPUT-SERVER-IMAGE
   newName: hanseni/log_output_server
-  newTag: 94b55d85d8e5bf135e39df7698db5b987d062f7f
+  newTag: dc3f84f94bf82d84caf49e7f4a59da0366676b27
 - name: PING-PONG-IMAGE
   newName: hanseni/ping_pong
-  newTag: 94b55d85d8e5bf135e39df7698db5b987d062f7f
+  newTag: dc3f84f94bf82d84caf49e7f4a59da0366676b27
 namespace: exercises

@@ -1,3 +1,9 @@
+# Log output and ping pong exercises
+
+```.github/workflows/cicd-exercises.yaml``` updates the configs to use the latest images automatically after commit.
+
+## Deploying
+
 Update the cluster with the gateway-api if needed
 ```sh
 gcloud container clusters update [clustername] --location=europe-north1-b --gateway-api=standard
@@ -31,7 +37,7 @@ kubectl get svc -n argocd
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 ```
 
-Deploy log output and ping pong:
+Deploy log output and ping pong (or use ArgoCD):
 ```sh
 kubectl apply -k .
 ```
@@ -39,4 +45,4 @@ kubectl apply -k .
 Check [gateway ip]:80
 
 #### Note when running on GKE
-3 e2-micro nodes might not have enough memory to run the deployment. At least 2 x e2-small seem to work.
+3 e2-micro nodes might not have enough memory to run the deployment. At least 2 x e2-small seems to work.

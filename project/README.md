@@ -1,5 +1,7 @@
 # Todo app project
 
+```.github/workflows/ci-project.yaml``` builds the images and updates the config when a commit changes them.
+
 ## Deploying
 #### Update the cluster with the gateway-api if needed
 ```sh
@@ -54,6 +56,17 @@ kubectl create secret generic db-backup-sa --from-file=credentials.json=your_sa.
 #### Setting up a webhook that is called when a todo is added or changed. (optional)
 ```sh
 kubectl set env deployment.apps/broadcaster-dep WEBHOOK_URL=[your webhook url]
+```
+
+#### Setup ArgoCD to sync the changes from this repo. (optional)
+```sh
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+
+# Get ip and password
+kubectl get svc -n argocd
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 ```
 
 The todo app becomes available at [gateway ip]:80

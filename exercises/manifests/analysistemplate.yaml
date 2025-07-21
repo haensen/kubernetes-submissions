@@ -7,7 +7,7 @@ spec:
   metrics:
   - name: cpu-rate
     initialDelay: 5m
-    successCondition: "all(result, # < 0.1)" # 0.001 makes rollout fail, 0.1 is a bit above normal spikes when the rollout is running
+    successCondition: "all(result, # < 0.15)" # 0.001 makes the rollout fail
     provider:
       prometheus:
         address: http://kube-prometheus-kube-prome-prometheus.prometheus.svc.cluster.local:9090

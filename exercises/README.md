@@ -3,6 +3,12 @@ Update the cluster with the gateway-api if needed
 gcloud container clusters update [clustername] --location=europe-north1-b --gateway-api=standard
 ```
 
+Add argo rollouts:
+```sh
+kubectl create namespace argo-rollouts
+kubectl apply -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
+```
+
 Add prometheus:
 ```sh
 # Adding these repos might not be necessary if it has been done before
@@ -11,16 +17,19 @@ helm repo add stable https://charts.helm.sh/stable
 helm repo update
 
 kubectl create namespace prometheus
-helm install prometheus-community/kube-prometheus-stack --generate-name --namespace prometheus
+helm install kube-prometheus prometheus-community/kube-prometheus-stack --namespace prometheus
 ```
 
-Add argo rollouts:
+Install ArgoCD if not done before:
 ```sh
-kubectl create namespace argo-rollouts
-kubectl apply -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
-```
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
 
-Change the analysistemplate.yaml to connect to the correct service. Find the service-name with ```kubectl get svc -n prometheus | grep 9090```
+# Get ip and password
+kubectl get svc -n argocd
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+```
 
 Deploy log output and ping pong:
 ```sh

@@ -1,0 +1,116 @@
+name: Release exercises
+
+on:
+  push:
+    branches:
+      - "**"
+    paths:
+      - "exercises/**"
+      - ".github/workflows/cicd-exercises.yaml"
+    tags:
+      - "!**" # Don't trigger on releases
+
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  GKE_CLUSTER: dwk-cluster
+  GKE_ZONE: europe-north1-b
+  REGISTRY: europe-north1-docker.pkg.dev
+  REPOSITORY: my-repo
+  IMAGE1: log_output
+  IMAGE2: ping_pong
+  BRANCH: ${{ github.ref_name }}
+  NAMESPACE: exercises
+
+jobs:
+  build-log-output-image:
+    name: Build log output
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GKE_SA_KEY }}'
+
+      - name: 'Set up Cloud SDK'
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: 'Use gcloud CLI'
+        run: gcloud info
+
+      - name: 'Configure docker to use gcloud'
+        run: gcloud --quiet auth configure-docker $REGISTRY
+
+      - name: 'Get GKE credentials'
+        uses: 'google-github-actions/get-gke-credentials@v2'
+        with:
+          cluster_name: '${{ env.GKE_CLUSTER }}'
+          project_id: '${{ env.PROJECT_ID }}'
+          location: '${{ env.GKE_ZONE }}'
+
+      - name : 'Form the image name 1'
+        run: echo "IMAGE_TAG1=$REGISTRY/$PROJECT_ID/$REPOSITORY/$IMAGE1:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
+      - name: Build 1
+        run: docker build --tag $IMAGE_TAG1 exercises/$IMAGE1/.
+      - name: Publish 1
+        run: docker push $IMAGE_TAG1
+
+  build-ping-pong-image:
+    name: Build ping pong
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GKE_SA_KEY }}'
+
+      - name: 'Set up Cloud SDK'
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: 'Use gcloud CLI'
+        run: gcloud info
+
+      - name: 'Configure docker to use gcloud'
+        run: gcloud --quiet auth configure-docker $REGISTRY
+
+      - name: 'Get GKE credentials'
+        uses: 'google-github-actions/get-gke-credentials@v2'
+        with:
+          cluster_name: '${{ env.GKE_CLUSTER }}'
+          project_id: '${{ env.PROJECT_ID }}'
+          location: '${{ env.GKE_ZONE }}'
+
+      - name : 'Form the image name 2'
+        run: echo "IMAGE_TAG2=$REGISTRY/$PROJECT_ID/$REPOSITORY/$IMAGE2:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
+      - name: Build 2
+        run: docker build --tag $IMAGE_TAG2 exercises/$IMAGE2/.
+      - name: Publish 2
+        run: docker push $IMAGE_TAG2
+
+  update-kustomization-yaml:
+    name: Update kustomization to use the new images
+    runs-on: ubuntu-latest
+    needs: [build-log-output-image, build-ping-pong-image]
+
+    steps:
+      - name: Set up Kustomize
+        uses: imranismail/setup-kustomize@v2.1.0
+
+      - name: Edit kustomization.yaml to use the new images
+        run: |-
+          cd exercises
+          kustomize edit set namespace $NAMESPACE
+          kustomize edit set image LOG-OUTPUT-IMAGE=$IMAGE_TAG1
+          kustomize edit set image PING-PONG-IMAGE=$IMAGE_TAG2
+          kustomize build . | kubectl apply -f -
+
+      - name: Commit edited kustomization.yaml
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: 'kustomization.yaml'
+          message: Kustomize.yaml updated to use the new images ${{ github.sha }}

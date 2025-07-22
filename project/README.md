@@ -16,7 +16,7 @@ helm repo add stable https://charts.helm.sh/stable
 helm repo update
 
 kubectl create namespace prometheus
-helm install prometheus-community/kube-prometheus-stack --generate-name --namespace prometheus
+helm install kube-prometheus prometheus-community/kube-prometheus-stack --namespace prometheus
 ```
 
 #### Deploy the todo-app
@@ -36,21 +36,10 @@ helm install -f manifests/nats-settings.yaml my-nats oci://registry-1.docker.io/
 ```
 
 #### Configure Prometheus to fetch metrics for NATS (optional)
-Get the description for prometheus object
 ```sh
-kubectl -n prometheus get prometheus
-kubectl -n prometheus describe prometheus [instance name like: kube-prometheus-stack-1753-prometheus]
+kubectl label servicemonitors.monitoring.coreos.com -n prometheus my-nats-metrics release=kube-prometheus
 ```
-```
-Service Monitor Selector:
-    Match Labels:
-      Release:  kube-prometheus-stack-1753088080
-```
-Attach the label to my-nats-metrics
-```sh
-kubectl label servicemonitors.monitoring.coreos.com -n prometheus my-nats-metrics release=kube-prometheus-stack-1753088080
-```
-[Grafana dashboard](https://raw.githubusercontent.com/nats-io/prometheus-nats-exporter/5084a32850823b59069f21f3a7dde7e488fef1c6/walkthrough/grafana-nats-dash.json)
+[Grafana dashboard for NATS](https://raw.githubusercontent.com/nats-io/prometheus-nats-exporter/5084a32850823b59069f21f3a7dde7e488fef1c6/walkthrough/grafana-nats-dash.json)
 
 #### Setting up database backups. (optional)
 A secret needs to be created with service account credentials. The service account should have Storage Object User IAM role.

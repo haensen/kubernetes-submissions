@@ -1,19 +1,10 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+
 resources:
-- manifests/namespace.yaml
-- manifests/persistentvolumeclaim.yaml
-- manifests/postgres-config.yaml
-- manifests/postgres.yaml
-- manifests/db_backup-cronjob.yaml
-- manifests/random_wiki-cronjob.yaml
-- manifests/todo_app-deployment.yaml
-- manifests/todo_app-service.yaml
-- manifests/todo_backend-deployment.yaml
-- manifests/todo_backend-service.yaml
-- manifests/broadcaster-deployment.yaml
-- manifests/gateway.yaml
-- manifests/routes.yaml
+- ./../../base
+namespace: staging
+
 images:
 - name: BROADCASTER-IMAGE
   newName: hanseni/broadcaster
@@ -30,4 +21,3 @@ images:
 - name: TODO-BACKEND-IMAGE
   newName: hanseni/todo_backend
   newTag: accaa1e8e37d5eb6768e59869a74c63ece6b31d1
-namespace: project

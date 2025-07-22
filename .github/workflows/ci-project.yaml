@@ -6,8 +6,8 @@ on:
       - "**"
     paths:
       - "!project/kustomization.yaml"
-      - "project/**"
-      - ".github/workflows/ci-project.yaml"
+      - "!project/**" # Don't run for now
+      - "!.github/workflows/ci-project.yaml"
     tags:
       - "!**" # Don't trigger on releases
 

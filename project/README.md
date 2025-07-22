@@ -19,40 +19,7 @@ kubectl create namespace prometheus
 helm install kube-prometheus prometheus-community/kube-prometheus-stack --namespace prometheus
 ```
 
-#### Deploy the todo-app
-```sh
-kubectl apply -k .
-```
-
-#### Set password for Postgresql
-```sh
-kubens project
-kubectl create secret generic postgres-secret --from-literal=POSTGRES_PASSWORD=yourpassword
-```
-
-#### Setup NATS
-```sh
-helm install -f manifests/nats-settings.yaml my-nats oci://registry-1.docker.io/bitnamicharts/nats
-```
-
-#### Configure Prometheus to fetch metrics for NATS (optional)
-```sh
-kubectl label servicemonitors.monitoring.coreos.com -n prometheus my-nats-metrics release=kube-prometheus
-```
-[Grafana dashboard for NATS](https://raw.githubusercontent.com/nats-io/prometheus-nats-exporter/5084a32850823b59069f21f3a7dde7e488fef1c6/walkthrough/grafana-nats-dash.json)
-
-#### Setting up database backups. (optional)
-A secret needs to be created with service account credentials. The service account should have Storage Object User IAM role.
-```sh
-kubectl create secret generic db-backup-sa --from-file=credentials.json=your_sa.json
-```
-
-#### Setting up a webhook that is called when a todo is added or changed. (optional)
-```sh
-kubectl set env deployment.apps/broadcaster-dep WEBHOOK_URL=[your webhook url]
-```
-
-#### Setup ArgoCD to sync the changes from this repo. (optional)
+#### Setup ArgoCD to sync the changes from this repo.
 ```sh
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
@@ -62,6 +29,58 @@ kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}
 kubectl get svc -n argocd
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 ```
+
+### Following steps needs to be done for both staging and production
+
+#### Create namespace
+```sh
+kubectl create namespace staging
+kubens staging
+
+# On production
+kubectl create namespace production
+kubens production
+```
+
+#### Set password for Postgresql
+```sh
+kubectl create secret generic postgres-secret --from-literal=POSTGRES_PASSWORD=yourpassword
+```
+
+#### Setup NATS
+```sh
+helm install -f base/nats-settings.yaml nats-staging oci://registry-1.docker.io/bitnamicharts/nats
+
+# On production
+helm install -f base/nats-settings.yaml nats-production oci://registry-1.docker.io/bitnamicharts/nats
+```
+
+#### Sync the git repo with ArgoCD
+```sh
+kubectl apply -n argocd -f base/overlays/staging/application.yaml
+
+# On production
+kubectl apply -n argocd -f base/overlays/production/application.yaml
+```
+
+#### Configure Prometheus to fetch metrics for NATS (optional)
+```sh
+kubectl label servicemonitors.monitoring.coreos.com -n prometheus nats-staging-metrics release=kube-prometheus
+
+# On production
+kubectl label servicemonitors.monitoring.coreos.com -n prometheus nats-production-metrics release=kube-prometheus
+```
+[Grafana dashboard for NATS](https://raw.githubusercontent.com/nats-io/prometheus-nats-exporter/5084a32850823b59069f21f3a7dde7e488fef1c6/walkthrough/grafana-nats-dash.json)
+
+### Settings for production
+
+#### Setting up database backups.
+A secret needs to be created with service account credentials. The service account should have Storage Object User IAM role.
+```sh
+kubectl create secret generic db-backup-sa --from-file=credentials.json=your_sa.json
+```
+
+#### To setup up a webhook that is called when a todo is added or changed, edit ```base/overlays/production/broadcaster-deployment.yaml```
 
 The todo app becomes available at [gateway ip]:80
 

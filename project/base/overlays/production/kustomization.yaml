@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- ./../../base
+- db_backup-cronjob.yaml
+patches:
+- path: broadcaster-deployment.yaml
+namespace: production
+
+images:
+- name: BROADCASTER-IMAGE
+  newName: hanseni/broadcaster
+  newTag: accaa1e8e37d5eb6768e59869a74c63ece6b31d1
+- name: DB-BACKUP-IMAGE
+  newName: hanseni/db_backup
+  newTag: accaa1e8e37d5eb6768e59869a74c63ece6b31d1
+- name: RANDOM-WIKI-TODO-IMAGE
+  newName: hanseni/random_wiki_todo
+  newTag: accaa1e8e37d5eb6768e59869a74c63ece6b31d1
+- name: TODO-APP-IMAGE
+  newName: hanseni/todo_app
+  newTag: accaa1e8e37d5eb6768e59869a74c63ece6b31d1
+- name: TODO-BACKEND-IMAGE
+  newName: hanseni/todo_backend
+  newTag: accaa1e8e37d5eb6768e59869a74c63ece6b31d1

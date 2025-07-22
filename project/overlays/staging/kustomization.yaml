@@ -3,6 +3,8 @@ kind: Kustomization
 
 resources:
 - ../../base
+patchesStrategicMerge:
+- broadcaster-deployment.yaml
 namespace: staging
 
 images:

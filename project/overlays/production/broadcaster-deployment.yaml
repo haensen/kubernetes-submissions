@@ -3,13 +3,7 @@ kind: Deployment
 metadata:
   name: broadcaster-deployment
 spec:
-  selector:
-    matchLabels:
-      app: broadcaster
   template:
-    metadata:
-      labels:
-        app: broadcaster
     spec:
       containers:
         - name: broadcaster

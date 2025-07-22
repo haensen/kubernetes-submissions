@@ -80,7 +80,7 @@ A secret needs to be created with service account credentials. The service accou
 kubectl create secret generic db-backup-sa --from-file=credentials.json=your_sa.json
 ```
 
-#### To setup up a webhook that is called when a todo is added or changed, edit ```base/overlays/production/broadcaster-deployment.yaml```
+#### To setup up a webhook that is called when a todo is added or changed, edit ```overlays/production/broadcaster-deployment.yaml```
 
 The todo app becomes available at [gateway ip]:80
 

@@ -24,9 +24,14 @@ helm install prometheus-community/kube-prometheus-stack --generate-name --namesp
 kubectl apply -k .
 ```
 
-#### Setup NATS
+#### Set password for Postgresql
 ```sh
 kubens project
+kubectl create secret generic postgres-secret --from-literal=POSTGRES_PASSWORD=yourpassword
+```
+
+#### Setup NATS
+```sh
 helm install -f manifests/nats-settings.yaml my-nats oci://registry-1.docker.io/bitnamicharts/nats
 ```
 

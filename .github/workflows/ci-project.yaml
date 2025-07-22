@@ -147,6 +147,9 @@ jobs:
             echo "KUSTOMIZATION_DIR=project/overlays/production" >> $GITHUB_ENV
           fi
 
+      - name: Change to the main branch
+        run: git checkout main
+
       - name: Edit kustomization.yaml to use the new images
         run: |-
           cd $KUSTOMIZATION_DIR

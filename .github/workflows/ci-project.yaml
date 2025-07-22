@@ -15,7 +15,7 @@ env:
   RANDOM_WIKI_TODO: random_wiki_todo
   DB_BACKUP: db_backup
   BROADCASTER: broadcaster
-  REF: ${{ github.ref#refs/heads/ }}
+  REF: ${{ github.ref_name }}
 
 jobs:
   build-todo-app-image:

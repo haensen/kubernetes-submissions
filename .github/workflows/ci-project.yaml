@@ -5,11 +5,9 @@ on:
     branches:
       - "**"
     paths:
-      - "!project/kustomization.yaml"
-      - "!project/**" # Don't run for now
-      - "!.github/workflows/ci-project.yaml"
-    tags:
-      - "!**" # Don't trigger on releases
+      - "!project/overlays/*/kustomization.yaml"
+      - "project/**"
+      - ".github/workflows/ci-project.yaml"
 
 env:
   TODO_APP: todo_app
@@ -17,7 +15,7 @@ env:
   RANDOM_WIKI_TODO: random_wiki_todo
   DB_BACKUP: db_backup
   BROADCASTER: broadcaster
-  NAMESPACE: project
+  REF: ${{ github.ref#refs/heads/ }}
 
 jobs:
   build-todo-app-image:
@@ -34,7 +32,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name : 'Form the image name'
-        run: echo "IMAGE_TAG=hanseni/$TODO_APP:$GITHUB_SHA" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG=hanseni/$TODO_APP:$REF-$GITHUB_SHA" >> $GITHUB_ENV
       - name: Build
         run: docker build --tag $IMAGE_TAG project/$TODO_APP/.
       - name: Publish
@@ -54,7 +52,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name : 'Form the image name'
-        run: echo "IMAGE_TAG=hanseni/$TODO_BACKEND:$GITHUB_SHA" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG=hanseni/$TODO_BACKEND:$REF-$GITHUB_SHA" >> $GITHUB_ENV
       - name: Build
         run: docker build --tag $IMAGE_TAG project/$TODO_BACKEND/.
       - name: Publish
@@ -74,7 +72,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name : 'Form the image name'
-        run: echo "IMAGE_TAG=hanseni/$RANDOM_WIKI_TODO:$GITHUB_SHA" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG=hanseni/$RANDOM_WIKI_TODO:$REF-$GITHUB_SHA" >> $GITHUB_ENV
       - name: Build
         run: docker build --tag $IMAGE_TAG project/$RANDOM_WIKI_TODO/.
       - name: Publish
@@ -94,7 +92,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name : 'Form the image name'
-        run: echo "IMAGE_TAG=hanseni/$DB_BACKUP:$GITHUB_SHA" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG=hanseni/$DB_BACKUP:$REF-$GITHUB_SHA" >> $GITHUB_ENV
       - name: Build
         run: docker build --tag $IMAGE_TAG project/$DB_BACKUP/.
       - name: Publish
@@ -114,7 +112,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name : 'Form the image name'
-        run: echo "IMAGE_TAG=hanseni/$BROADCASTER:$GITHUB_SHA" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG=hanseni/$BROADCASTER:$REF-$GITHUB_SHA" >> $GITHUB_ENV
       - name: Build
         run: docker build --tag $IMAGE_TAG project/$BROADCASTER/.
       - name: Publish
@@ -133,20 +131,27 @@ jobs:
         uses: imranismail/setup-kustomize@v2.1.0
 
       - name : 'Form the image name 1'
-        run: echo "IMAGE_TAG1=hanseni/$TODO_APP:$GITHUB_SHA" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG1=hanseni/$TODO_APP:$REF-$GITHUB_SHA" >> $GITHUB_ENV
       - name : 'Form the image name 2'
-        run: echo "IMAGE_TAG2=hanseni/$TODO_BACKEND:$GITHUB_SHA" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG2=hanseni/$TODO_BACKEND:$REF-$GITHUB_SHA" >> $GITHUB_ENV
       - name : 'Form the image name 3'
-        run: echo "IMAGE_TAG3=hanseni/$RANDOM_WIKI_TODO:$GITHUB_SHA" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG3=hanseni/$RANDOM_WIKI_TODO:$REF-$GITHUB_SHA" >> $GITHUB_ENV
       - name : 'Form the image name 4'
-        run: echo "IMAGE_TAG4=hanseni/$DB_BACKUP:$GITHUB_SHA" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG4=hanseni/$DB_BACKUP:$REF-$GITHUB_SHA" >> $GITHUB_ENV
       - name : 'Form the image name 5'
-        run: echo "IMAGE_TAG5=hanseni/$BROADCASTER:$GITHUB_SHA" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG5=hanseni/$BROADCASTER:$REF-$GITHUB_SHA" >> $GITHUB_ENV
+
+      - name: Get the kustomization.yaml directory
+        run: |-
+          if [ "$REF" == "main" ]; then
+            echo "KUSTOMIZATION_DIR=project/overlays/production" >> $GITHUB_ENV
+          else
+            echo "KUSTOMIZATION_DIR=project/overlays/staging" >> $GITHUB_ENV
+          fi
 
       - name: Edit kustomization.yaml to use the new images
         run: |-
-          cd project
-          kustomize edit set namespace $NAMESPACE
+          cd $KUSTOMIZATION_DIR
           kustomize edit set image TODO-APP-IMAGE=$IMAGE_TAG1
           kustomize edit set image TODO-BACKEND-IMAGE=$IMAGE_TAG2
           kustomize edit set image RANDOM-WIKI-TODO-IMAGE=$IMAGE_TAG3
@@ -156,5 +161,5 @@ jobs:
       - name: Commit edited kustomization.yaml
         uses: EndBug/add-and-commit@v9
         with:
-          add: 'project/kustomization.yaml'
+          add: '${{ env.KUSTOMIZATION_DIR }}/kustomization.yaml'
           message: kustomization.yaml updated to use the new images from ${{ github.sha }}

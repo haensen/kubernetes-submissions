@@ -1,15 +1,15 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-- manifests/namespace.yaml
-- manifests/persistentvolumeclaim.yaml
-- manifests/postgres-config.yaml
-- manifests/postgres.yaml
-- manifests/random_wiki-cronjob.yaml
-- manifests/todo_app-deployment.yaml
-- manifests/todo_app-service.yaml
-- manifests/todo_backend-deployment.yaml
-- manifests/todo_backend-service.yaml
-- manifests/broadcaster-deployment.yaml
-- manifests/gateway.yaml
-- manifests/routes.yaml
+- namespace.yaml
+- persistentvolumeclaim.yaml
+- postgres-config.yaml
+- postgres.yaml
+- random_wiki-cronjob.yaml
+- todo_app-deployment.yaml
+- todo_app-service.yaml
+- todo_backend-deployment.yaml
+- todo_backend-service.yaml
+- broadcaster-deployment.yaml
+- gateway.yaml
+- routes.yaml

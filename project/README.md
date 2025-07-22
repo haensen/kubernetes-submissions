@@ -57,10 +57,10 @@ helm install -f base/nats-settings.yaml nats-production oci://registry-1.docker.
 
 #### Sync the git repo with ArgoCD
 ```sh
-kubectl apply -n argocd -f base/overlays/staging/application.yaml
+kubectl apply -n argocd -f overlays/staging/application.yaml
 
 # On production
-kubectl apply -n argocd -f base/overlays/production/application.yaml
+kubectl apply -n argocd -f overlays/production/application.yaml
 ```
 
 #### Configure Prometheus to fetch metrics for NATS (optional)

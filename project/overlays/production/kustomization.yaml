@@ -4,8 +4,8 @@ kind: Kustomization
 resources:
 - ../../base
 - db_backup-cronjob.yaml
-patchesStrategicMerge:
-- broadcaster-deployment.yaml
+patches:
+- path: broadcaster-deployment.yaml
 namespace: production
 
 images:

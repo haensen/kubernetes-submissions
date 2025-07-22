@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/haensen/kubernetes-submissions
-    path: project/base/overlays/staging
+    path: project/overlays/staging
     targetRevision: HEAD
   destination:
     server: https://kubernetes.default.svc

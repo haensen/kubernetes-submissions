@@ -9,6 +9,4 @@ spec:
         - name: broadcaster
           env:
             - name: NATS_URL
-              value: "nats://nats-production:4222"
-            - name: WEBHOOK_URL
-              value: "url_to_the_webhook"
+              value: "nats://nats-staging:4222"

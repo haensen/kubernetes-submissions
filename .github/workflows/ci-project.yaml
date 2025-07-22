@@ -2,8 +2,6 @@ name: Build and publish images for todo-project
 
 on:
   push:
-    branches:
-      - "**"
     paths:
       - "!project/overlays/*/kustomization.yaml"
       - "project/**"

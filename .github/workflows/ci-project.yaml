@@ -144,9 +144,9 @@ jobs:
       - name: Get the kustomization.yaml directory
         run: |-
           if [ "$REF" == "main" ]; then
-            echo "KUSTOMIZATION_DIR=project/overlays/production" >> $GITHUB_ENV
-          else
             echo "KUSTOMIZATION_DIR=project/overlays/staging" >> $GITHUB_ENV
+          else
+            echo "KUSTOMIZATION_DIR=project/overlays/production" >> $GITHUB_ENV
           fi
 
       - name: Edit kustomization.yaml to use the new images

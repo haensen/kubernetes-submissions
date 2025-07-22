@@ -11,16 +11,16 @@ namespace: staging
 images:
 - name: BROADCASTER-IMAGE
   newName: hanseni/broadcaster
-  newTag: main-317ae89ec9a70f6c1077456c22441bbcbb401f21
+  newTag: main-c2f14d67fb48845baaf27ecb22ecf31ac13cf56d
 - name: DB-BACKUP-IMAGE
   newName: hanseni/db_backup
-  newTag: main-317ae89ec9a70f6c1077456c22441bbcbb401f21
+  newTag: main-c2f14d67fb48845baaf27ecb22ecf31ac13cf56d
 - name: RANDOM-WIKI-TODO-IMAGE
   newName: hanseni/random_wiki_todo
-  newTag: main-317ae89ec9a70f6c1077456c22441bbcbb401f21
+  newTag: main-c2f14d67fb48845baaf27ecb22ecf31ac13cf56d
 - name: TODO-APP-IMAGE
   newName: hanseni/todo_app
-  newTag: main-317ae89ec9a70f6c1077456c22441bbcbb401f21
+  newTag: main-c2f14d67fb48845baaf27ecb22ecf31ac13cf56d
 - name: TODO-BACKEND-IMAGE
   newName: hanseni/todo_backend
-  newTag: main-317ae89ec9a70f6c1077456c22441bbcbb401f21
+  newTag: main-c2f14d67fb48845baaf27ecb22ecf31ac13cf56d

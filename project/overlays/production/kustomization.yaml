@@ -6,6 +6,7 @@ resources:
 - db_backup-cronjob.yaml
 patches:
 - path: broadcaster-deployment.yaml
+- path: todo_backend-deployment.yaml
 namespace: production
 
 images:

@@ -5,6 +5,7 @@ resources:
 - ../../base
 patches:
 - path: broadcaster-deployment.yaml
+- path: todo_backend-deployment.yaml
 namespace: staging
 
 images:

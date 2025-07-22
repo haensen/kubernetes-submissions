@@ -1,0 +1,13 @@
+apiVersion: stable.dwk/v1
+kind: DummySite
+metadata:
+  name: dummy-site-google
+spec:
+  website_url: "https://www.google.com"
+---
+apiVersion: stable.dwk/v1
+kind: DummySite
+metadata:
+  name: dummy-site-wiki
+spec:
+  website_url: "https://www.wikipedia.org"

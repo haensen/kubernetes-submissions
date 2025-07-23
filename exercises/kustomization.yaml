@@ -13,10 +13,10 @@ images:
   newTag: "5.3"
 - name: LOG-OUTPUT-GENERATOR-IMAGE
   newName: hanseni/log_output_generator
-  newTag: fb01af828484d94d5c83dc6723a14371c3ea9ad3
+  newTag: 2814a09e5cfa42846596cf3c85a2a11911afcd35
 - name: LOG-OUTPUT-SERVER-IMAGE
   newName: hanseni/log_output_server
-  newTag: "5.7"
+  newTag: 2814a09e5cfa42846596cf3c85a2a11911afcd35
 - name: PING-PONG-IMAGE
   newName: hanseni/ping_pong
-  newTag: fb01af828484d94d5c83dc6723a14371c3ea9ad3
+  newTag: 2814a09e5cfa42846596cf3c85a2a11911afcd35

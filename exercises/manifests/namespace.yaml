@@ -4,4 +4,3 @@ metadata:
   name: exercises
   labels:
     name: exercises
-    istio.io/dataplane-mode: ambient

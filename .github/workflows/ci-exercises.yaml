@@ -100,7 +100,6 @@ jobs:
       - name: Edit kustomization.yaml to use the new images
         run: |-
           cd exercises
-          kustomize edit set namespace $NAMESPACE
           kustomize edit set image LOG-OUTPUT-GENERATOR-IMAGE=$IMAGE_TAG1
           kustomize edit set image LOG-OUTPUT-SERVER-IMAGE=$IMAGE_TAG2
           kustomize edit set image PING-PONG-IMAGE=$IMAGE_TAG3

@@ -9,33 +9,18 @@
 k3d cluster create --api-port 6550 -p '9080:80@loadbalancer' -p '9443:443@loadbalancer' --agents 2 --k3s-arg '--disable=traefik@server:*'
 ```
 
-### Install istio to k3d
+### Add Knative and Kourier
 ```sh
-# Add repo if not done before
-helm repo add istio https://istio-release.storage.googleapis.com/charts
-helm repo update
+kubectl apply -f https://github.com/knative/serving/releases/download/knative-v1.18.1/serving-crds.yaml
+kubectl apply -f https://github.com/knative/serving/releases/download/knative-v1.18.1/serving-core.yaml
 
-kubectl get crd gateways.gateway.networking.k8s.io &> /dev/null || \
-kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/standard-install.yaml
+kubectl apply -f https://github.com/knative/net-kourier/releases/download/knative-v1.18.0/kourier.yaml
+kubectl patch configmap/config-network \
+  --namespace knative-serving \
+  --type merge \
+  --patch '{"data":{"ingress-class":"kourier.ingress.networking.knative.dev"}}'
 
-istioctl install --set profile=ambient --skip-confirmation --set values.global.platform=k3d
-```
-
-Add argo rollouts:
-```sh
-kubectl create namespace argo-rollouts
-kubectl apply -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
-```
-
-Add prometheus:
-```sh
-# Adding these repos might not be necessary if it has been done before
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm repo add stable https://charts.helm.sh/stable
-helm repo update
-
-kubectl create namespace prometheus
-helm install kube-prometheus prometheus-community/kube-prometheus-stack --namespace prometheus
+kubectl apply -f https://github.com/knative/serving/releases/download/knative-v1.18.1/serving-default-domain.yaml
 ```
 
 Deploy:
@@ -54,8 +39,24 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 kubectl apply -k .
 ```
 
-Access the app with: ```kubectl port-forward svc/my-gateway-istio 80```
+Optional: update greeter to v2 and balance the load between the two versions
+```sh
+kubectl apply -f manifests/greeter-knative-v2.yaml
+```
 
-Check the kiali visualization: ```istioctl dashboard kiali```
+Access the app
+```sh
+# Get the URL
+$ kubectl get ksvc
+NAME         URL                                               LATESTCREATED      LATESTREADY        READY   REASON
+greeter      http://greeter.exercises.172.18.0.3.sslip.io      greeter-00001      greeter-00001      True
+log-output   http://log-output.exercises.172.18.0.3.sslip.io   log-output-00002   log-output-00002   True
+ping-pong    http://ping-pong.exercises.172.18.0.3.sslip.io    ping-pong-00002    ping-pong-00002    True
 
-![](./service-mesh.png)
+$ curl -H "Host: log-output.exercises.172.18.0.3.sslip.io" http://localhost:9080
+file content: this text is from a file
+message: hello world
+2025-07-23T20:28:08.186Z: yrvvth599k
+Ping / Pongs: 2
+greetings: Hello from greeter version v1
+```

@@ -3,17 +3,10 @@ kind: Kustomization
 resources:
 - manifests/namespace.yaml
 - manifests/configmap.yaml
-- manifests/analysistemplate.yaml
-- manifests/log-output-rollout.yaml
-- manifests/log-output-service.yaml
-- manifests/ping-pong-rollout.yaml
-- manifests/ping-pong-service.yaml
 - manifests/postgres.yaml
-- manifests/gateway.yaml
-- manifests/routes.yaml
-- manifests/greeter-deployments.yaml
-- manifests/greeter-services.yaml
-- manifests/greeter-gateway.yaml
+- manifests/log-output-knative.yaml
+- manifests/ping-pong-knative.yaml
+- manifests/greeter-knative.yaml
 images:
 - name: GREETER-IMAGE
   newName: hanseni/greeter
@@ -23,8 +16,7 @@ images:
   newTag: fb01af828484d94d5c83dc6723a14371c3ea9ad3
 - name: LOG-OUTPUT-SERVER-IMAGE
   newName: hanseni/log_output_server
-  newTag: fb01af828484d94d5c83dc6723a14371c3ea9ad3
+  newTag: "5.7"
 - name: PING-PONG-IMAGE
   newName: hanseni/ping_pong
   newTag: fb01af828484d94d5c83dc6723a14371c3ea9ad3
-namespace: exercises

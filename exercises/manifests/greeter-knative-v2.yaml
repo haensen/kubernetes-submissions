@@ -1,0 +1,22 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: greeter
+  namespace: exercises
+spec:
+  template:
+    spec:
+      containers:
+      - name: greeter
+        image: hanseni/greeter:5.3
+        env:
+        - name: VERSION
+          value: "v2"
+        ports:
+        - containerPort: 80
+  traffic:
+    - latestRevision: true
+      percent: 50
+    - latestRevision: false
+      percent: 50
+      revisionName: greeter-00001

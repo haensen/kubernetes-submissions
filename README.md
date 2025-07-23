@@ -66,3 +66,4 @@ Submissions to the course Devops with Kubernetes 2025
 - [5.3](https://github.com/haensen/kubernetes-submissions/tree/5.3/exercises)
 - [5.4](https://github.com/haensen/kubernetes-submissions/tree/5.4/wiki_server)
 - [5.6](https://github.com/haensen/kubernetes-submissions/tree/5.6/5.6-serverless.md)
+- [5.7](https://github.com/haensen/kubernetes-submissions/tree/5.7/exercises)

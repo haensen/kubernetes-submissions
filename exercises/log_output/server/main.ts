@@ -9,7 +9,8 @@ const app = new Hono();
 app.get("/", async (c) => {
     const randomContent = Deno.readTextFileSync(FILE);
     const pingPongContent = await fetch("http://ping-pong-svc:80/pings").then(res => res.text());
-    return c.text(`file content: ${configMapFileContent}\nmessage: ${MESSAGE}\n${randomContent}\n${pingPongContent}`);
+    const greeterContent = await fetch(Deno.env.get("GREETER_URL")).then(res => res.text());
+    return c.text(`file content: ${configMapFileContent}\nmessage: ${MESSAGE}\n${randomContent}\n${pingPongContent}\ngreetings: ${greeterContent}`);
 });
 
 app.get("/healthz", async (c) => {

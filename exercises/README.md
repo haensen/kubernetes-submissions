@@ -4,9 +4,21 @@
 
 ## Deploying
 
-Update the cluster with the gateway-api if needed
+### Create a cluster without traefik
 ```sh
-gcloud container clusters update [clustername] --location=europe-north1-b --gateway-api=standard
+k3d cluster create --api-port 6550 -p '9080:80@loadbalancer' -p '9443:443@loadbalancer' --agents 2 --k3s-arg '--disable=traefik@server:*'
+```
+
+### Install istio to k3d
+```sh
+# Add repo if not done before
+helm repo add istio https://istio-release.storage.googleapis.com/charts
+helm repo update
+
+kubectl get crd gateways.gateway.networking.k8s.io &> /dev/null || \
+kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/standard-install.yaml
+
+istioctl install --set profile=ambient --skip-confirmation --set values.global.platform=k3d
 ```
 
 Add argo rollouts:
@@ -26,8 +38,9 @@ kubectl create namespace prometheus
 helm install kube-prometheus prometheus-community/kube-prometheus-stack --namespace prometheus
 ```
 
-Install ArgoCD if not done before:
+Deploy:
 ```sh
+## Option 1
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
@@ -35,14 +48,14 @@ kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}
 # Get ip and password
 kubectl get svc -n argocd
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
-```
 
-Deploy log output and ping pong (or use ArgoCD):
-```sh
+
+# Option 2
 kubectl apply -k .
 ```
 
-Check [gateway ip]:80
+Access the app with: ```kubectl port-forward svc/my-gateway-istio 80```
 
-#### Note when running on GKE
-3 e2-micro nodes might not have enough memory to run the deployment. At least 2 x e2-small seems to work.
+Check the kiali visualization: ```istioctl dashboard kiali```
+
+![](./service-mesh.png)

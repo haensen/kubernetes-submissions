@@ -61,6 +61,8 @@ spec:
                 configMapKeyRef:
                   name: log-output-config
                   key: MESSAGE
+            - name: GREETER_URL
+              value: "http://greeter-gateway-istio.exercises.svc.cluster.local"
             - name: TEST_VALUE_TO_TRIGGER_ROLLOUT
               value: "4ee"
           volumeMounts:

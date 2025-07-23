@@ -15,16 +15,16 @@ resources:
 - manifests/greeter-services.yaml
 - manifests/greeter-gateway.yaml
 images:
-- name: LOG-OUTPUT-GENERATOR-IMAGE
-  newName: hanseni/log_output_generator
-  newTag: 7262a54b11f9012d013d1eb60b631fcf9110dd45
-- name: LOG-OUTPUT-SERVER-IMAGE
-  newName: hanseni/log_output_server
-  newTag: "5.3"
-- name: PING-PONG-IMAGE
-  newName: hanseni/ping_pong
-  newTag: 7262a54b11f9012d013d1eb60b631fcf9110dd45
 - name: GREETER-IMAGE
   newName: hanseni/greeter
   newTag: "5.3"
+- name: LOG-OUTPUT-GENERATOR-IMAGE
+  newName: hanseni/log_output_generator
+  newTag: fb01af828484d94d5c83dc6723a14371c3ea9ad3
+- name: LOG-OUTPUT-SERVER-IMAGE
+  newName: hanseni/log_output_server
+  newTag: fb01af828484d94d5c83dc6723a14371c3ea9ad3
+- name: PING-PONG-IMAGE
+  newName: hanseni/ping_pong
+  newTag: fb01af828484d94d5c83dc6723a14371c3ea9ad3
 namespace: exercises
